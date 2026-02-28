@@ -16,5 +16,6 @@ only put the frontend code into these files, which are available within the src 
 
 3.for this project, i'm using supabase as the backend. i need to set up the supabase urls and keys within the App.jsx files, so please setup that. i'll put the project URL and anon keys by myself.
 
+4.when a product is added to the bag, ensure to give a popup notification that that product was added to bag. ensure it is shown for 3 seconds, then fades out under a second.
 
-4.
+5.
