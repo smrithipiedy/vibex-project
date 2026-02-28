@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import './App.css';
 
-// Supabase Configuration (Placeholder)
+// Supabase Configuration
 const SUPABASE_URL = 'https://giwbhgsbxzxzidmtknig.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdpd2JoZ3NieHp4emlkbXRrbmlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNTMxNTEsImV4cCI6MjA4NzgyOTE1MX0.rceDkdGX87j625lrXsur-b9YsQV3cj-eOjEyFBx0YiE';
-const supabase = (SUPABASE_URL !== 'https://giwbhgsbxzxzidmtknig.supabase.co' && SUPABASE_URL !== '')
+
+// Safe initialization
+const supabase = (SUPABASE_URL.startsWith('https://'))
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
@@ -72,6 +75,7 @@ function App() {
   const [order, setOrder] = useState(null);
   const [location, setLocation] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [notification, setNotification] = useState({ show: false, productName: '' });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -79,6 +83,12 @@ function App() {
 
   const addToBag = (p) => {
     setCart([...cart, { ...p, cartId: Math.random() }]);
+
+    // Trigger notification
+    setNotification({ show: true, productName: p.name });
+    setTimeout(() => {
+      setNotification({ show: false, productName: '' });
+    }, 4000); // 3 seconds visible + 1 second fade logic in CSS
   };
 
   const removeFromBag = (cid) => {
@@ -312,6 +322,15 @@ function App() {
             Pricing includes GST. Terms and conditions apply. Fast delivery available only in verified IT Parks.</p>
         </div>
       </footer>
+
+      {notification.show && (
+        <div className="bag-notification fade-in-out">
+          <div className="notification-content">
+            <span className="success-dot"></span>
+            <p><strong>{notification.productName}</strong> added to bag</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
